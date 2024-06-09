@@ -442,10 +442,7 @@ export class ReplayWebApp extends LitElement {
     }
 
     return html`
-      ${!this.embed || this.embed === "full" ? this.renderNavBar() : ""}
       ${this.sourceUrl ? this.renderColl() : this.renderHomeIndex()}
-      ${this.showAbout ? this.renderAbout() : ""}
-      ${this.showFileDropOverlay ? this.renderDropFileOverlay() : ""}
     `;
   }
 

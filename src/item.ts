@@ -927,49 +927,26 @@ class Item extends LitElement {
       ></wr-loader>`;
     } else if (this.itemInfo) {
       return html`
-        ${this.renderLocationBar()} ${this.renderVerifyInfo()}
-        <sl-dialog label="Archive Info" ${ref(this.archiveInfoDialog)}>
-          ${this.renderItemInfo()}
-          <sl-button
-            slot="footer"
-            variant="primary"
-            @click="${this.onHideInfoDialog}"
-            >Close</sl-button
-          >
-        </sl-dialog>
-        <div id="tabContents">
-          <div
-            id="contents"
-            class="is-light ${isSidebar
-              ? "sidebar"
-              : isReplay
-              ? "is-hidden"
-              : "full-pages"}"
-            role="${ifDefined(isSidebar ? "complementary" : undefined)}"
-            aria-label="${isSidebar ? "Browse Contents" : ""}"
-          >
-            ${this.renderTabHeader(isSidebar)}
-            ${isSidebar || !isReplay ? this.renderItemTabs(isSidebar) : html``}
-          </div>
-
-          ${isReplay && this.isVisible
-            ? html`
-                <wr-coll-replay
-                  role="main"
-                  tabindex="-1"
-                  .collInfo="${this.itemInfo}"
-                  sourceUrl="${this.sourceUrl || ""}"
-                  url="${this.tabData.url || ""}"
-                  ts="${this.tabData.ts || ""}"
-                  @coll-tab-nav="${this.onItemTabNav}"
-                  id="replay"
-                  @replay-loading="${(e: CustomEvent<{ loading: boolean }>) =>
-                    (this.isLoading = e.detail.loading)}"
-                  @replay-favicons="${this.onFavIcons}"
-                >
-                </wr-coll-replay>
-              `
-            : ""}
+          ${
+            isReplay && this.isVisible
+              ? html`
+                  <wr-coll-replay
+                    role="main"
+                    tabindex="-1"
+                    .collInfo="${this.itemInfo}"
+                    sourceUrl="${this.sourceUrl || ""}"
+                    url="${this.tabData.url || ""}"
+                    ts="${this.tabData.ts || ""}"
+                    @coll-tab-nav="${this.onItemTabNav}"
+                    id="replay"
+                    @replay-loading="${(e: CustomEvent<{ loading: boolean }>) =>
+                      (this.isLoading = e.detail.loading)}"
+                    @replay-favicons="${this.onFavIcons}"
+                  >
+                  </wr-coll-replay>
+                `
+              : ""
+          }
         </div>
       `;
     } else {

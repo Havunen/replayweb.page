@@ -2,7 +2,6 @@ import { LitElement, html, css, type PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 import { wrapCss } from "./misc";
-import rwpLogo from "~assets/brand/replaywebpage-icon-color.svg";
 import type { ItemType } from "./types";
 
 // ===========================================================================
@@ -95,6 +94,8 @@ class Replay extends LitElement {
       this.url && this.collInfo
         ? `${this.collInfo.replayPrefix}/${this.ts || ""}mp_/${this.url}`
         : "";
+
+    console.log(this.iframeUrl);
   }
 
   updated(changedProperties: PropertyValues<this>) {
@@ -345,78 +346,14 @@ class Replay extends LitElement {
   }
 
   render() {
-    const title = `Replay of ${this.title ? `${this.title}:` : ""} ${this.url}`;
-
-    return html` <h1 id="replay-heading" class="is-sr-only">${title}</h1>
-
-      ${!this.iframeUrl
-        ? html` <div class="panel intro-panel">
-            <p class="panel-heading">Replay Web Page</p>
-            <div class="panel-block">
-              <p>Enter a URL above to replay it from the web archive!</p>
-              <p>
-                (Or, check out <a href="#view=pages">Pages</a> or
-                <a href="#view=resources">URLs</a> to explore the contents of
-                this archive.)
-              </p>
-            </div>
-          </div>`
-        : html`
-            <div class="iframe-container">
-              <iframe
-                class="iframe-main"
-                name="___wb_replay_top_frame"
-                @message="${this.onReplayMessage}"
-                allow="autoplay 'self'; fullscreen"
-                allowfullscreen
-                src="${this.iframeUrl}"
-                title="${title}"
-              ></iframe>
-
-              ${this.showAuth
-                ? html`
-                    <div class="iframe-main modal-bg">
-                      <div class="panel intro-panel">
-                        <p class="panel-heading">
-                          <fa-icon
-                            id="wrlogo"
-                            size="1.5rem"
-                            .svg=${rwpLogo}
-                            aria-hidden="true"
-                          ></fa-icon>
-                          Authorization Needed
-                        </p>
-                        <div class="panel-block">
-                          ${this.authFileHandle
-                            ? html`
-                                <p>
-                                  This archive is loaded from a local file:
-                                  <b>${this.authFileHandle.name}</b>
-                                </p>
-                                <p>
-                                  The browser needs to confirm your permission
-                                  to continue loading from this file.
-                                </p>
-                                <button
-                                  class="button is-warning is-rounded"
-                                  @click="${this.onReAuthed}"
-                                >
-                                  Show Confirmation
-                                </button>
-                              `
-                            : html` <wr-gdrive
-                                .sourceUrl="${this.sourceUrl!}"
-                                state="trymanual"
-                                .reauth="${true}"
-                                @load-ready="${this.onReAuthed}"
-                              ></wr-gdrive>`}
-                        </div>
-                      </div>
-                    </div>
-                  `
-                : ""}
-            </div>
-          `}`;
+    return html`<iframe
+      class="iframe-main"
+      name="___wb_replay_top_frame"
+      @message="${this.onReplayMessage}"
+      allow="autoplay 'self'; fullscreen"
+      allowfullscreen
+      src="${this.iframeUrl as string}"
+    ></iframe>`;
   }
 }
 
